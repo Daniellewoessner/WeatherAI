@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors'; // 
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,6 +17,11 @@ if (!apiKey) {
 }
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: ['https://weatherai-ucpm.onrender.com', 'http://localhost:3001'], // Removed trailing slash
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 const model = new ChatOpenAI({
     openAIApiKey: apiKey,
     modelName: "gpt-3.5-turbo",

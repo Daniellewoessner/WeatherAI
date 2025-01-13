@@ -24,7 +24,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: ['https://weatherai-ucpm.onrender.com/', 'http://localhost:3001'],
+  origin: ['https://weatherai-ucpm.onrender.com', 'http://localhost:3001'], // Removed trailing slash
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
