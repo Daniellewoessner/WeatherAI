@@ -6,6 +6,7 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors'; // 
 
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
@@ -21,6 +22,12 @@ if (!apiKey) {
 
 const app = express();
 app.use(express.json());
+
+app.use(cors({
+  origin: ['https://daniellewoessner.github.io', 'http://localhost:3001'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 const model = new ChatOpenAI({
   openAIApiKey: apiKey,
