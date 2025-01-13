@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+    <!-- Centered Header -->
+<header class="header-container">
+    <div class="header-content">
+        <h1 class="header-title">WeatherAI</h1> 
+        <img src="https://www.pngfind.com/pngs/m/236-2369672_sunshine-png-free-image-sun-clip-art-transparent.png" width="50" height="60" alt="">
+
+
+    </div>
+</header>
+ <body>
+
+        <!-- Main chat area with border -->
+        <div class="flex-1 container mx-auto px-4 mb-4">
+            <div class="chat-wrapper">
+                <div class="bg-white rounded-lg shadow-lg">
+                    <div class="chat-container" id="chatContainer">
+                        <!-- Messages will be added here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Style selector and input area with colored background -->
+        <div class="bottom-section">
+            <div class="style-selector">
+                <label class="style-option">
+                    <input type="radio" name="style" value="sportscaster" checked>
+                    <span>Sports Announcer</span>
+                </label>
+                <label class="style-option">
+                    <input type="radio" name="style" value="cartoon">
+                    <span>Cartoon Character</span>
+                </label>
+                <label class="style-option">
+                    <input type="radio" name="style" value="superhero">
+                    <span>Superhero Character</span>
+              
+            </div>
+            
+            <div class="input-wrapper">
+                <form id="chatForm" class="input-form">
+                    <input 
+                        type="text" 
+                        id="messageInput"
+                        class="message-input"
+                        placeholder="Enter a city name..."
+                    >
+                    <button type="submit" class="send-button">
+                        Send
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+const chatForm = document.getElementById('chatForm');
+const messageInput = document.getElementById('messageInput');
+
+function addMessage(content, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `p-6 ${isUser ? 'message-user' : 'message-assistant'}`;
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'mx-auto';
+    
+    const innerContent = document.createElement('p');
+    innerContent.className = 'text-gray-800';
+    innerContent.textContent = content;
+    
+    messageContent.appendChild(innerContent);
+    messageDiv.appendChild(messageContent);
+    chatContainer.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
+
+chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const city = messageInput.value.trim();
+    
+    if (!city) return;
+
+    // Add user message
+    addMessage(`Get weather forecast for ${city}`, true);
+    
+    try {
+        const response = await fetch('http://localhost:3001/forecast', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                location: {
+                    city: city
+                },
+                style: document.querySelector('input[name="style"]:checked').value
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+            addMessage(`Error: ${data.error}`);
+        } else {
+            addMessage(data.result.forecast);
+        }
+    } catch (error) {
+        addMessage(`Sorry, there was an error getting the forecast. Please try again.`);
+        console.error('Error:', error);
+    }
+
+    // Clear input
+    messageInput.value = '';
+});
+
+// Add initial message
+addMessage("Hello! I'm your WeatherAI assistant, please select your style, and enter desired location!");
+    </script>
+</body>
+</html>
