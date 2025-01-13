@@ -90,28 +90,25 @@ function addMessage(content, isUser = false) {
 chatForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const city = messageInput.value.trim();
+    const style = document.querySelector('input[name="style"]:checked').value;
     
     if (!city) return;
 
     // Add user message
     addMessage(`Get weather forecast for ${city}`, true);
-  
-    const API_URL = 'https://api.openai.com/v1/chat/completions';
 
-try {
-    const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-            location: {
-                city: city
+    try {
+        // Call YOUR server endpoint, not OpenAI directly
+        const response = await fetch('/forecast', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
-            style: document.querySelector('input[name="style"]:checked').value
-        })
-    });
+            body: JSON.stringify({
+                location: { city: city },
+                style: style
+            })
+        });
 
         const data = await response.json();
         
