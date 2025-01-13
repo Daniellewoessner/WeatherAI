@@ -32,7 +32,7 @@ const promptTemplate2 = new PromptTemplate({
     inputVariables: ["city"]
 });
 const promptTemplate3 = new PromptTemplate({
-    template: "Pretend you are a superhero giving the five day forecast",
+    template: "Pretend you are a superhero character giving the five day forecast before going to save the city from evil!",
     inputVariables: ["city"]
 });
 app.post('/forecast', async (req, res) => {
@@ -81,9 +81,9 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
 });
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '..'))); // Changed from '../public' to '..'
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, '../index.html')); // Changed from '../public/index.html'
 });
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);

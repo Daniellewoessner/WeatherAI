@@ -97,9 +97,12 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   next();
 });
-app.use(express.static(path.join(__dirname, '../public')));
+
+app.use(express.static(path.join(__dirname, '..'))); // Changed from '../public' to '..'
+
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, '../index.html')); // Changed from '../public/index.html'
 });
 
 app.listen(port, () => {
