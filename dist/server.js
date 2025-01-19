@@ -18,7 +18,7 @@ if (!apiKey) {
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: ['https://weatherai-ucpm.onrender.com', 'http://localhost:3001'], // Removed trailing slash
+    origin: ['https://weatherai-ucpm.onrender.com', 'http://localhost:3001'],
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -28,7 +28,6 @@ const model = new ChatOpenAI({
     temperature: 0.7,
 });
 const stringParser = new StringOutputParser();
-// Simplified prompt template
 const promptTemplate = new PromptTemplate({
     template: "Give me a sports-announcer style weather forecast for {city}. Include temperature, conditions, and precipitation chance for the next 5 days.",
     inputVariables: ["city"]
@@ -87,9 +86,9 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     next();
 });
-app.use(express.static(path.join(__dirname, '..'))); // Changed from '../public' to '..'
+app.use(express.static(path.join(__dirname, '..')));
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html')); // Changed from '../public/index.html'
+    res.sendFile(path.join(__dirname, '../index.html'));
 });
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
